@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1">
+  <title>portal</title>
+  <style>
+    html, body {
+      padding: 0;
+    }
+
+    body {
+      color: #333;
+      font: 2em monospace; 
+    }
+
+    .bg-video {
+      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1000;
+    }
+
+    .portalGun {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      z-index: 2000;
+      display: none;
+    }
+
+    .portalClippedThing {
+      clip-path: url(#clipPath);
+      overflow: hidden;
+    }
+
+    .portalBorder {
+      fill-opacity: 0;
+      stroke: url(#radialGradient);
+      stroke-width: 5px;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    .portalBorderContainer {
+      display: none;
+      padding: 0;
+      margin: 0;
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 1000;
+      height: 244px;
+      width: 166px;
+    }
+
+    .portalContent {
+      position: relative;
+      left: 0;
+      top: 0;
+      z-index: -500;
+    }
+  </style>
+</head>
+<body>
+
+  <video class="bg-video"></video>
+
+  <img class="portalGun" src="portalgun.png">
+
+  <div class="portalBorderContainer portalClippedThing ">
+    <!--<iframe class="portalContent" src="http://localhost"></iframe>-->
+    <svg height="244px" width="166px">
+      <clipPath id="clipPath" clipPathUnits="objectBoundingBox">
+        <circle cx="0.5" cy="0.5" r="0.5"/>
+      </clipPath>
+      <defs>
+        <filter id="filter" x="-0.1px" y="-0.08px">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
+        </filter>
+        <radialGradient id="radialGradient" gradientUnits="userSpaceOnUse" cx="83" cy="120" r="150">
+          <stop offset="0%" style="stop-color:#FFFFFF;"/>
+          <stop offset="100%" style="stop-color:blue;"/>
+        </radialGradient>
+      </defs>
+      <ellipse class="portalBorder" cx="83" cy="120" rx="76" ry="112" filter="url(#filter)">
+        <animate attributeName="stroke-width" dur="2.0s" values="10; 5; 10" keyTimes="0; .5; 1" repeatCount="indefinite"/>
+      </ellipse>
+    </svg>
+  </div>
+
+  <!-- preload audio -->
+  <audio id='portal_ambient_loop1' src='sound/portal_ambient_loop1.wav' preload='auto' loop='true'></audio>
+  <audio id='portal_close1' src='sound/portal_close1.wav' preload='auto'></audio>
+  <audio id='portal_close2' src='sound/portal_close2.wav' preload='auto'></audio>
+  <audio id='portal_open1' src='sound/portal_open1.wav' preload='auto'></audio>
+  <audio id='portal_open2' src='sound/portal_open2.wav' preload='auto'></audio>
+  <audio id='portal_open3' src='sound/portal_open3.wav' preload='auto'></audio>
+  <audio id='portalgun_powerup1' src='sound/portalgun_powerup1.wav' preload='auto'></audio>
+  <audio id='portalgun_shoot_blue1' src='sound/portalgun_shoot_blue1.wav' preload='auto'></audio>
+  <audio id='portalgun_shoot_red1' src='sound/portalgun_shoot_red1.wav' preload='auto'></audio>
+
+  <script src="portal.js"></script>
+</body>
+</html>
