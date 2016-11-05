@@ -6,18 +6,45 @@
 //var catURL = 'http://thecatapi.com/api/images/get?format=src&type=gif&' + (new Date());
 //var targetURL = 'data:text/html,' + encodeURIComponent('<html><body scrolling="no" style="margin:0;padding:0"><img height="260px" width="180px" style="position:absolute;top:0;left:0;border:0" src="' + catURL +'"></body></html>');
 
+/*
+
+* make 3D portal gun, and change direction with cursor
+
+*/
+
 var armed = false;
 
 document.addEventListener('DOMContentLoaded', function() {
   var config = {video: true, audio: false};
 
   initCamera(config, function(stream) {
-    //var video = document.createElement('video');
     var video = document.querySelector('.bg-video');
     video.setAttribute('autoplay', true);
     video.src = window.URL.createObjectURL(stream);
     console.log('camera initialized');
   });
+
+  window.onresize = function (event) {
+    if (window.innerHeight > window.innerWidth) {
+      if (armed) {
+        console.log('portrait');
+        disarmWeapon();
+      }
+    }
+    else {
+      if (!armed) {
+        console.log('landscape');
+        armWeapon();
+      }
+    }
+  }
+
+  window.addEventListener("orientationchange", function() {
+    armWeapon()
+  }, false);
+
+  //armWeapon()
+  //onShoot({pageX: 200, pageY: 200})
 });
 
 function initCamera(config, callback) {
@@ -85,8 +112,21 @@ function onShoot(e) {
   // make portal visible and position per click coordinates
   var div = document.querySelector('.portalBorderContainer');
   div.style.display = 'block';
-  div.style.left = (e.pageX - 90) + 'px';
   div.style.top = (e.pageY - 120) + 'px';
+  div.style.left = (e.pageX - 90) + 'px';
+
+  // center content within portal
+  var content = document.querySelector('.portalContent');
+
+  var portalHeight = parseInt(getComputedStyle(div).height, 10);
+  var contentHeight = parseInt(getComputedStyle(content).height, 10);
+  var contentTop = (portalHeight / 2) - (contentHeight / 2);
+  content.style.top = contentTop + 'px';
+
+  var portalWidth = parseInt(getComputedStyle(div).width, 10);
+  var contentWidth = parseInt(getComputedStyle(content).width, 10);
+  var contentLeft = (portalWidth / 2) - (contentWidth / 2);
+  content.style.left = contentLeft + 'px';
 }
 
 function clearPortal() {
